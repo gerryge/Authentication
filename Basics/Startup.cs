@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Basics.AuthorizationRequirements;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,12 +21,22 @@ namespace Basics
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication("Cookie")
-                .AddCookie("Cookie", options =>
-                {
-                    options.Cookie.Name = "Gerry.Cookie";
-                    options.LoginPath = "/Home/Authenticate";
-                });
+            // services.AddAuthentication("Cookie")
+            //     .AddCookie("Cookie", options =>
+            //     {
+            //         options.Cookie.Name = "Gerry.Cookie";
+            //         options.LoginPath = "/Home/Authenticate";
+            //     });
+            
+            //等效于上面的方法
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(options =>
+            {
+                options.Cookie.Name = "Ge.Cookie";
+                options.LoginPath = "/Home/Authenticate";
+            });
 
             services.AddAuthorization(options =>
             {
